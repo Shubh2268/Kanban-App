@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Column from "./Column";
-import TaskForm from "./TaskForm";
-import { DndContext, closestCorners } from "@dnd-kit/core";
-import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import React, { useState, useEffect } from 'react';
+import Column from './Column';
+import TaskForm from './TaskForm';
+import { DndContext, closestCorners } from '@dnd-kit/core';
+import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 
 const Board = () => {
   const [tasks, setTasks] = useState({
@@ -12,21 +12,21 @@ const Board = () => {
   });
 
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("darkMode") === "true";
+    return localStorage.getItem('darkMode') === 'true';
   });
 
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem("kanbanTasks"));
+    const storedTasks = JSON.parse(localStorage.getItem('kanbanTasks'));
     if (storedTasks) setTasks(storedTasks);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
+    localStorage.setItem('kanbanTasks', JSON.stringify(tasks));
   }, [tasks]);
 
   useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-    document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem('darkMode', darkMode);
+    document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
   const addTask = (task) => {
@@ -61,25 +61,21 @@ const Board = () => {
   };
 
   return (
-    <div className={`min-h-screen p-6 transition-all ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`} 
-         style={{ backgroundImage: "url('/kanban-bg.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
-      
+    <div className={`min-h-screen p-6 transition-all ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+
       {/* Dark Mode Toggle */}
-      <button
-        onClick={() => setDarkMode(!darkMode)}
-        className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-all"
-      >
-        {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
+      <button onClick={() => setDarkMode(!darkMode)} className='absolute top-4 right-4 p-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-all'>
+        {darkMode ? '🌞 Light Mode' : '🌙 Dark Mode'}
       </button>
 
       <TaskForm addTask={addTask} />
       
       <DndContext collisionDetection={closestCorners} onDragEnd={onDragEnd}>
         <SortableContext items={[...tasks.todo, ...tasks.inProgress, ...tasks.done]}>
-          <div className="flex gap-4">
-            <Column title="To Do" tasks={tasks.todo} setTasks={setTasks} category="todo" />
-            <Column title="In Progress" tasks={tasks.inProgress} setTasks={setTasks} category="inProgress" />
-            <Column title="Done" tasks={tasks.done} setTasks={setTasks} category="done" />
+          <div className='flex gap-4'>
+            <Column title='To Do' tasks={tasks.todo} setTasks={setTasks} category='todo' />
+            <Column title='In Progress' tasks={tasks.inProgress} setTasks={setTasks} category='inProgress' />
+            <Column title='Done' tasks={tasks.done} setTasks={setTasks} category='done' />
           </div>
         </SortableContext>
       </DndContext>
