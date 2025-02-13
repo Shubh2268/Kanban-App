@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("Medium"); // Default priority
+  const [priority, setPriority] = useState("Medium");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
@@ -18,12 +18,12 @@ const TaskForm = ({ addTask }) => {
     addTask({ id: uuidv4(), title, description, priority });
     setTitle("");
     setDescription("");
-    setPriority("Medium"); // Reset priority
-    setError(""); // Clear error
+    setPriority("Medium");
+    setError("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 flex gap-2 items-center">
+    <form onSubmit={handleSubmit} className="mb-6 flex gap-3 items-center bg-white p-4 rounded-lg shadow-md">
       <input
         type="text"
         placeholder="Task title"
@@ -47,7 +47,7 @@ const TaskForm = ({ addTask }) => {
         <option value="Medium">⚡ Medium</option>
         <option value="Low">💧 Low</option>
       </select>
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all">
         Add Task
       </button>
       

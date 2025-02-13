@@ -11,18 +11,24 @@ const Board = () => {
     done: [],
   });
 
-  // Load tasks from local storage on mount
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
+
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("kanbanTasks"));
     if (storedTasks) setTasks(storedTasks);
   }, []);
 
-  // Save tasks to local storage whenever tasks change
   useEffect(() => {
     localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // Add new task to "To Do" category
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+
   const addTask = (task) => {
     setTasks((prevTasks) => ({
       ...prevTasks,
@@ -30,22 +36,8 @@ const Board = () => {
     }));
   };
 
-  // Delete task from a specific category
-  const deleteTask = (taskId, category) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = {
-        ...prevTasks,
-        [category]: prevTasks[category].filter((task) => task.id !== taskId),
-      };
-      localStorage.setItem("kanbanTasks", JSON.stringify(updatedTasks)); // Update local storage
-      return updatedTasks;
-    });
-  };
-
-  // Handle drag-and-drop movement
   const onDragEnd = (event) => {
     const { active, over } = event;
-
     if (!over) return;
 
     const sourceCategory = active.data.current.category;
@@ -53,17 +45,14 @@ const Board = () => {
 
     if (sourceCategory !== destCategory) {
       const task = tasks[sourceCategory].find((t) => t.id === active.id);
-
       setTasks((prev) => ({
         ...prev,
         [sourceCategory]: prev[sourceCategory].filter((t) => t.id !== active.id),
         [destCategory]: [...prev[destCategory], task],
       }));
     } else {
-      // Reorder within the same category
       const oldIndex = tasks[sourceCategory].findIndex((t) => t.id === active.id);
       const newIndex = tasks[destCategory].findIndex((t) => t.id === over.id);
-
       setTasks((prev) => ({
         ...prev,
         [sourceCategory]: arrayMove(prev[sourceCategory], oldIndex, newIndex),
@@ -72,14 +61,25 @@ const Board = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className={`min-h-screen p-6 transition-all ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`} 
+         style={{ backgroundImage: "url('/kanban-bg.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
+      
+      {/* Dark Mode Toggle */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="absolute top-4 right-4 p-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-all"
+      >
+        {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
+      </button>
+
       <TaskForm addTask={addTask} />
+      
       <DndContext collisionDetection={closestCorners} onDragEnd={onDragEnd}>
         <SortableContext items={[...tasks.todo, ...tasks.inProgress, ...tasks.done]}>
           <div className="flex gap-4">
-            <Column title="To Do" tasks={tasks.todo} category="todo" deleteTask={deleteTask} />
-            <Column title="In Progress" tasks={tasks.inProgress} category="inProgress" deleteTask={deleteTask} />
-            <Column title="Done" tasks={tasks.done} category="done" deleteTask={deleteTask} />
+            <Column title="To Do" tasks={tasks.todo} setTasks={setTasks} category="todo" />
+            <Column title="In Progress" tasks={tasks.inProgress} setTasks={setTasks} category="inProgress" />
+            <Column title="Done" tasks={tasks.done} setTasks={setTasks} category="done" />
           </div>
         </SortableContext>
       </DndContext>
