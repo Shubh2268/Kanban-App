@@ -63,11 +63,6 @@ const Board = () => {
   return (
     <div className={`min-h-screen p-6 transition-all ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
 
-      {/* Dark Mode Toggle */}
-      <button onClick={() => setDarkMode(!darkMode)} className='absolute top-4 right-4 p-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition-all'>
-        {darkMode ? '🌞 Light Mode' : '🌙 Dark Mode'}
-      </button>
-
       <TaskForm addTask={addTask} />
       
       <DndContext collisionDetection={closestCorners} onDragEnd={onDragEnd}>

@@ -20,7 +20,7 @@ const Column = ({ title, tasks, category, deleteTask }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`w-1/3 p-4 rounded-lg shadow-md border-2 ${columnStyles[category]}`}
+      className={`w-1/3 p-4 rounded-lg shadow-md border ${columnStyles[category]}`}
     >
       <h2 className='text-lg font-semibold mb-3 flex items-center gap-2'>
         {icons[category]} {title}

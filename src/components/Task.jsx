@@ -36,21 +36,12 @@ const Task = ({ task, category, deleteTask }) => {
     >
       <div className='flex-1'>
         <h3 className='text-md font-semibold'>{task.title}</h3>
-        <p className='text-sm text-gray-600 dark:text-gray-300'>{task.description}</p>
-        <span
-          className={`px-2 py-1 text-xs font-bold rounded-full mt-2 inline-block ${priorityColors[task.priority] || 'bg-gray-200 text-gray-700'
-            }`}
-        >
-          {task.priority} Priority
-        </span>
+        <p className='text-sm text-gray-600 py-1'>{task.description}</p>
+        <span className={`px-3 py-1 text-xs font-medium rounded-full mt-2 inline-block ${priorityColors[task.priority] || 'bg-gray-200 text-gray-700'
+            }`}>{task.priority} Priority</span>
       </div>
 
-      <button
-        onClick={() => deleteTask(task.id, category)}
-        className='text-red-500 hover:text-red-700 text-lg transition-all'
-      >
-        ❌
-      </button>
+      <button onClick={() => deleteTask(task.id, category)} className='text-red-500 hover:text-red-600 text-4xl transition-all cursor-pointer'>×</button>
     </div>
   );
 };
